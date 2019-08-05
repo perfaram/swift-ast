@@ -63,6 +63,7 @@ struct ParserPatternConfig {
       // below are keywords also can be used as identifier pattern
       .Any,
       .Self,
+      .self,
       .get,
       .set,
       .left,
@@ -122,7 +123,7 @@ extension Parser {
       return typeCastingPttrn
     case .underscore:
       return try parseUnderscoreHeadedPattern(config: config, startRange: lookedRange)
-    case .identifier, .Any, .Self, .get, .set, .left, .right, .open, .prefix, .postfix:
+    case .identifier, .Any, .Self, .self, .get, .set, .left, .right, .open, .prefix, .postfix:
       guard let idHead = patternHead.namedIdentifier?.id else {
         throw _raiseFatal(.expectedPattern)
       }

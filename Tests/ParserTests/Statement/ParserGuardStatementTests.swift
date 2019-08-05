@@ -38,6 +38,16 @@ class ParserGuardStatementTests: XCTestCase {
     })
   }
 
+    func testStrongSelfTest() {
+        parseStatementAndTest("guard let self = self else {}", "guard let self = self else {}", testClosure: { stmt in
+            guard stmt is GuardStatement else {
+                XCTFail("Failed in parsing a while statement with self token.")
+                return
+            }
+            XCTAssert(true)
+        })
+    }
+
   static var allTests = [
     ("testGuardStmt", testGuardStmt),
     ("testSourceRange", testSourceRange),
