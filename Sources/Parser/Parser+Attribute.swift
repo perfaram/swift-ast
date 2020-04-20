@@ -28,13 +28,16 @@ extension Parser {
   }
 
   private func parseAttribute() throws -> Attribute {
+    let idTypeStartRange = getLookedRange()
     guard case let .identifier(id, backticked) = _lexer.read(.dummyIdentifier) else {
       throw _raiseFatal(.missingAttributeName)
     }
     let name: Identifier = backticked ? .backtickedName(id) : .name(id)
+    let type = try parseIdentifierType(name, idTypeStartRange)
+    
     let leftParenCp = _lexer.checkPoint()
     guard _lexer.matchUnicodeScalar("(", immediateFollow: true) else {
-      return Attribute(name: name)
+      return Attribute(type: type)
     }
     let balancedTokens = parseBalancedTokens(expectedClosingCharacter: ")")
     var argumentClause: Attribute.ArgumentClause?
@@ -46,7 +49,7 @@ extension Parser {
     } else {
       argumentClause = Attribute.ArgumentClause(balancedTokens: balancedTokens)
     }
-    return Attribute(name: name, argumentClause: argumentClause)
+    return Attribute(type: type, argumentClause: argumentClause)
   }
 
   private func parseBalancedTokens(

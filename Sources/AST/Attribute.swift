@@ -32,11 +32,11 @@ public struct Attribute {
     }
   }
 
-  public let name: Identifier
+  public let type: TypeIdentifier
   public let argumentClause: ArgumentClause?
 
-  public init(name: Identifier, argumentClause: ArgumentClause? = nil) {
-    self.name = name
+  public init(type: TypeIdentifier, argumentClause: ArgumentClause? = nil) {
+    self.type = type
     self.argumentClause = argumentClause
   }
 }
@@ -70,6 +70,6 @@ extension Attribute.ArgumentClause : ASTTextRepresentable {
 
 extension Attribute : ASTTextRepresentable {
   public var textDescription: String {
-    return "@\(name)\(argumentClause?.textDescription ?? "")"
+    return "@\(type)\(argumentClause?.textDescription ?? "")"
   }
 }
